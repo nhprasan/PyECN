@@ -38,7 +38,7 @@ matplotlib==3.7.2
     # via
     #   PyECN (pyproject.toml)
     #   vtk
-mayavi==4.8.1
+# mayavi==4.8.1
     # via PyECN (pyproject.toml)
 moviepy==1.0.3
     # via PyECN (pyproject.toml)

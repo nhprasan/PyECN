@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D # <--- This is important for 3d plotting
-from mayavi import mlab
+# from mayavi import mlab
 import scipy.sparse.linalg
 import scipy.sparse
 from scipy import interpolate

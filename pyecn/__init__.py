@@ -4,7 +4,7 @@
 def run() -> None:
     """Run PyECN."""
     import numpy as np
-    from mayavi import mlab
+    # from mayavi import mlab
     import scipy.sparse.linalg
     import scipy.sparse
     from scipy.optimize import fsolve
@@ -12,6 +12,7 @@ def run() -> None:
     import scipy.io as sio
 
     import pyecn.parse_inputs as ip
+    from pyecn.Visualization.live_plot import on_step as live_plot_on_step
 
     inf=1e10
 
@@ -499,6 +500,7 @@ def run() -> None:
                         part_i.T3_4T_ALL=part_i.fun_Thermal(part_i.T1_4T_ALL, part_i.T3_4T_ALL, part_i.ind0_BCtem_ALL, part_i.ind0_BCtem_others_ALL, part_i.h_4T_ALL, part_i.Tconv_4T_ALL, part_i.ind0_BCconv_ALL, part_i.ind0_BCconv_others_ALL);                  te_step_T=time.time() if ip.status_Count=='Yes' else []        #calculate node temperature
                         #print('Tavg', part_i.T3_4T_ALL)
                         part_i.T_record[:,step]=part_i.T3_4T_ALL.reshape(-1)                                                                                                                                           #record T
+                        live_plot_on_step(part_i, step)
                         part_i.T_avg_record[step], part_i.T_SD_record[step], part_i.T_Delta_record[step] =part_i.fun_weighted_avg_and_std(part_i.T3_4T_ALL,part_i.rou_c_V_weights)                                                                                                            #record T average and SD, all weighted by ρcV
                         part_i.T1_4T_ALL=part_i.T3_4T_ALL.copy()
                         if part_i.status_Echeck=='Yes':
@@ -537,6 +539,7 @@ def run() -> None:
                     part_i.T3_4T_ALL = module_1_4T.T3_4T_Module[i0_row_temp].reshape(-1,1)
                     part_i.T1_4T_ALL = part_i.T3_4T_ALL
                     part_i.T_record[:,step]=part_i.T3_4T_ALL.reshape(-1)                                                                                                                    #record T
+                    live_plot_on_step(part_i, step)
                     part_i.T_avg_record[step], part_i.T_SD_record[step], part_i.T_Delta_record[step] =part_i.fun_weighted_avg_and_std(part_i.T3_4T_ALL,part_i.rou_c_V_weights)                                                                                                            #record T average and SD, all weighted by ρcV
 
                 #--calculate volume-average T and SD
@@ -599,7 +602,7 @@ def run() -> None:
         #3D visualization
         if ip.status_visualization_method == 'mayavi':
             #Temperature
-            globals()[ip.status_PostProcess_cell_id].fig1 = mlab.figure(bgcolor=(1,1,1))
+            # globals()[ip.status_PostProcess_cell_id].fig1 = mlab.figure(bgcolor=(1,1,1))
             plot_steps_available=np.where(~np.isnan(cell_i.T_avg_record))[0]      #in cycling mode, there are NaN values in the last cycles. So here plot_steps_available is all the steps with non-NaN values
             plot_step=plot_steps_available[-1]                             #plot the last step from non-NaN steps
             vmin, vmax = (cell_i.T_record[:,plot_step]-273.15).min(), (cell_i.T_record[:,plot_step]-273.15).max()
@@ -628,7 +631,7 @@ def run() -> None:
         #3D visualization
         if ip.status_visualization_method == 'mayavi':
             #Temperature
-            module_1.fig1 = mlab.figure(bgcolor=(1,1,1))
+            # module_1.fig1 = mlab.figure(bgcolor=(1,1,1))
             plot_steps_available=np.where(~np.isnan(cell_1.T_avg_record))[0]      #in cycling mode, there are NaN values in the last cycles. So here plot_steps_available is all the steps with non-NaN values
             plot_step=plot_steps_available[-1]                             #plot the last step from non-NaN steps
             if ip.status_FormFactor == 'Prismatic':
@@ -642,7 +645,7 @@ def run() -> None:
                 part_i = globals()[item_temp2]
                 part_i.fun_mayavi_by_node(module_1.Cells_XYZ_Module[i0,:], part_i.T_record[:,plot_step]-273.15, vmin, vmax, title_string = '°C', colormap_string = 'coolwarm')
     print('Postprocessing is done')
-    mlab.show()
+    # mlab.show()
     if ip.status_Module == 'Yes' or ip.status_Module_4T == 'Yes':
         print('Switch for advance structure is ON')
     else:

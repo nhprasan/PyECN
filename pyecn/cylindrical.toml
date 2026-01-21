@@ -2,8 +2,8 @@
 General_conditions = "Default"
 nx = 5  # Discretisation points in x
 ny = 5  # Discretisation points in y
-nstack = 9  # Simulated repeat units nstack = 2*(number of layers) - 1
-nRC = 3  # Number of R-C pairs in simulation
+nstack = 8  # Simulated repeat units nstack = 2*(number of layers) - 1
+nRC = 2  # Number of R-C pairs in simulation
 Module = "No"
 Module_4T = "No"
 Electrical_type = "ECN_Plain"
@@ -18,7 +18,7 @@ CC = "Yes"  # Current collector resistance consideration: "Yes"/"No"
 R0_minus_Rcc = "No"  # Subtract current collector resistance from R0: "Yes"/"No"
 Thermal_tab = "Default"  # "Tabless_virtual/Default"; positive/negative tab between jellyroll and can; "Tabless_virtual": At positive tab, Al and Can are thermally connected. At negative tab, Cu and Can are thermally connected; "Default": at positive and negative tab, tab and can are thermally insulated
 Electrical_tab = "Default"  # "Tabless_virtual/Default"
-Thermal_partition_can = "Yes"  # Consideration of can: "Yes"/"No"
+Thermal_partition_can = "No"  # Consideration of can: "Yes"/"No"
 
 [runtime_options]
 Count = "Yes"  # Calculate run time each section: "Yes"/"No"
@@ -32,7 +32,7 @@ Smoothing_stiffness = 1
 
 [operating_conditions]
 C_rate = 1  # Define simulation current
-I_ext_fpath = ""  # Use time-varying current: "/path/to/file/containing/current/data" / ""
+I_ext_fpath = "C:/Users/nh1pr/Documents/PyECN/pyecn/Examples/Profiles/mixed_charge_discharge.csv"  # Use time-varying current: "/path/to/file/containing/current/data" / ""
 dt = 1  # Timestep (s)
 SoC_initial = 1  # State of charge initial condition
 Current_direction = 1  # 1/-1 for discharge/charge
@@ -168,17 +168,17 @@ Thermal_solver = "CN"  # Thermal solver type (implicit/explicit): "CN"/"Explicit
 Linsolver_E_module = "Sparse"
 
 [postprocessing]
-PostProcessor = "Yes"  # Run post-processor at cell level: "Yes"/"No"
+PostProcessor = "No"  # Run post-processor at cell level: "Yes"/"No"
 PostProcess_cell_id = "cell_1"  # Postprocess cell_1 by default
 PostProcessor_module = "Yes"  # Run post-processor at module level: "Yes"/"No"
 PostProcess_module_id = "module_1"  # Postprocess module_1 by default
-Visualisation_method = "mayavi"  # Visualisation method type: "mayavi"/"plotly"
+Visualisation_method = "plotly"  # Visualisation method type: "mayavi"/"plotly"
 Temp_levels = 40  # Number of divisions on colour bar
 Temp_min = 15.0  # Minimum temperature on colour bar
 Temp_max = 35.0  # Maximum temperature on colour bar
 PlotLUT = "No"  # Plotting LUTs: "Yes"/"No"
 PlotNode = "No"  # Plot nodes in figure: "Yes"/"No"
-Fig1to9 = "Yes"  # Plot figures 1 to 9:  "Yes"/"No"
+Fig1to9 = "No"  # Plot figures 1 to 9:  "Yes"/"No"
 PopFig_or_SaveGIF_instant = "No"
 PopFig_or_SaveGIF_replay = "GIF"
 Plot_type_preprocess = "instant"

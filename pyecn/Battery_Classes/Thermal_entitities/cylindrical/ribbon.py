@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from mayavi import mlab
+# from mayavi import mlab
 import scipy.sparse.linalg
 import scipy.sparse
 from moviepy.video.io.bindings import mplfig_to_npimage

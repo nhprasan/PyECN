@@ -2,6 +2,7 @@
 from pathlib import Path
 import numpy as np
 import sys
+from pyecn.I_Profile_Loader.current_profile import load_current_profile
 from pyecn.read_LUT import read_LUT
 from tomli import load as load_toml
 
@@ -124,7 +125,9 @@ C_rate_Module = module_params["C_rate_module"]
 if op_conds["I_ext_fpath"] == "":
     nt = int(3600/op_conds["C_rate"]/op_conds["dt"])
 else:  # use time-varying current
-    Table_I_ext = np.loadtxt(op_conds["I_ext_fpath"])
+    # Table_I_ext = np.loadtxt(op_conds["I_ext_fpath"])
+    i_ext_path = Path(op_conds["I_ext_fpath"])
+    Table_I_ext = load_current_profile(i_ext_path, op_conds["dt"])
     nt = np.size(Table_I_ext)-1
 if status_FormFactor != "Pouch":
     status_ThermalBC_Core = op_conds["Thermal_BC_core"]
