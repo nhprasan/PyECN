@@ -5,13 +5,24 @@
 
 PyECN is a python-based equivalent circuit network (ECN) framework for modelling lithium-ion batteries.
 
+## Framework overview
+
+An Equivalent Circuit Network (ECN) represents a complex electrochemical system using
+standard electrical components (e.g., resistors and capacitors) to approximate its
+behavior without explicitly modeling all internal physics. PyECN extends this idea by
+discretizing a cell into many coupled electrical and thermal sub-units, enabling
+spatially resolved electro-thermal simulation for pouch, cylindrical, and prismatic
+form factors.
+
+At runtime, PyECN loads a TOML configuration, prepares lookup tables (LUTs), builds the
+cell model, and advances the coupled electrical + thermal solvers over time.
 
 ## Using PyECN
 
-PyECN is run by providing `pyecn` with a configuration file for a simulation, containing details of a cell's geometrical, physical, electrical and thermal properties, as well as operating conditions. An example configuration file for a pouch cell is provided in `pouch.toml`:
+PyECN is run by providing `pyecn` with a configuration file for a simulation, containing details of a cell's geometrical, physical, electrical and thermal properties, as well as operating conditions. An example configuration file for a pouch cell is provided in `cylindrical.toml`:
 
 ```bash
-$ python -m pyecn pouch.toml
+$ python -m pyecn cylindrical.toml
 ```
 
 PyECN can also be run in an interactive python session:
@@ -21,9 +32,28 @@ $ python
 >>> import pyecn
 >>> pyecn.run()
 Enter config file name:
-pouch.toml
+cylindrical.toml
 ```
 
+### Live visualization with custom current profiles
+
+You can run live electro-thermal visualization (surface temperature heatmap + time series)
+by providing a current profile CSV via the CLI. The CSV must contain headers `t_s,I_A`
+with monotonic time (duplicate times are allowed for piecewise-constant steps). Use
+`--dt` to control the solver time step and `--t_end` to override the simulation duration
+if desired.
+
+Example:
+
+```bash
+python -m pyecn cylindrical.toml --profile mixed.csv --dt 1 --t_end 200
+```
+
+Notes:
+
+* If `--profile` is a relative path, PyECN first checks the current working directory,
+  then falls back to `pyecn/Examples/Profiles/`.
+* Positive current is discharge, negative current is charge.
 
 ## Installing PyECN
 
@@ -47,6 +77,11 @@ pouch.toml
   pip install -U pip
   pip install -r requirements.txt
   ```
+
+  4. Run a simulation (example):
+  ```bash
+  python -m pyecn cylindrical.toml --profile mixed.csv --dt 1 --t_end 200
+  ```
 </details>
 
 <details>
@@ -68,6 +103,11 @@ pouch.toml
   ```bat
   pip install -U pip
   pip install -r requirements.txt
+  ```
+
+  4. Run a simulation (example):
+  ```bat
+  python -m pyecn cylindrical.toml --profile mixed.csv --dt 1 --t_end 200
   ```
 </details>
 
