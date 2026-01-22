@@ -32,7 +32,7 @@ Smoothing_stiffness = 1
 
 [operating_conditions]
 C_rate = 1  # Define simulation current
-I_ext_fpath = "C:/Users/nh1pr/Documents/PyECN/pyecn/Examples/Profiles/mixed_charge_discharge.csv"  # Use time-varying current: "/path/to/file/containing/current/data" / ""
+I_ext_fpath = "pyecn/Examples/Profiles/mixed.csv"  # Use time-varying current: "/path/to/file/containing/current/data" / ""
 dt = 1  # Timestep (s)
 SoC_initial = 1  # State of charge initial condition
 Current_direction = 1  # 1/-1 for discharge/charge

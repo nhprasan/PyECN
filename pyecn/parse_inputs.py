@@ -2,7 +2,8 @@
 from pathlib import Path
 import numpy as np
 import sys
-from pyecn.I_Profile_Loader.current_profile import load_current_profile
+from pyecn.I_Profile_Loader.current_profile import load_current_profile_with_t_end
+from pyecn.cli import apply_cli_overrides, parse_cli_args
 from pyecn.read_LUT import read_LUT
 from tomli import load as load_toml
 
@@ -12,8 +13,10 @@ try:
 except IndexError:
     print("Enter config file name:")
     input_file = input()
-with open(root_dir / input_file, mode="rb") as f:
+cli_args = parse_cli_args()                              # Parse any CLI overrides
+with open(root_dir / input_file, mode="rb") as f:        # Load TOML configuration
     inputs = load_toml(f)
+apply_cli_overrides(inputs, cli_args)                    # Apply any CLI overrides   
 
 model_params = inputs["model"]
 runtime_opts = inputs["runtime_options"]
@@ -122,12 +125,13 @@ status_discharge_Module = module_params["Current_direction_module"]
 status_IVmode_Module = module_params["IV_mode_module"]
 soc_initial_Module = module_params["SoC_initial_module"]
 C_rate_Module = module_params["C_rate_module"]
+t_end_override = runtime_opts.get("t_end")          # Check for optional simulation end time override
 if op_conds["I_ext_fpath"] == "":
     nt = int(3600/op_conds["C_rate"]/op_conds["dt"])
-else:  # use time-varying current
-    # Table_I_ext = np.loadtxt(op_conds["I_ext_fpath"])
+else:  # Load and interpolate external current profile to solver time grid
     i_ext_path = Path(op_conds["I_ext_fpath"])
-    Table_I_ext = load_current_profile(i_ext_path, op_conds["dt"])
+    Table_I_ext = load_current_profile_with_t_end(
+        i_ext_path, op_conds["dt"], t_end_override)
     nt = np.size(Table_I_ext)-1
 if status_FormFactor != "Pouch":
     status_ThermalBC_Core = op_conds["Thermal_BC_core"]

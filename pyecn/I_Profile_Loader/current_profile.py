@@ -123,6 +123,28 @@ def load_current_profile(path: Path, dt: float) -> np.ndarray:
     return interpolate_profile(profile, time_grid)
 
 
+def load_current_profile_with_t_end(path: Path, dt: float, t_end: float | None) -> np.ndarray:
+    """Load CSV profile and interpolate to solver time steps with optional t_end override.
+
+    Args:
+        path: Path to CSV profile file
+        dt: Time step size in seconds (from solver configuration)
+        t_end: Optional simulation end time override in seconds
+
+    Returns:
+        Array of current values at each time step
+    
+    Raises:
+        FileNotFoundError: If profile file does not exist
+        ValueError: If profile is invalid or interpolation fails
+    """
+    if t_end is None:
+        return load_current_profile(path, dt)
+    profile = load_profile_csv(path)
+    time_grid = build_time_grid(dt, t_end)
+    return interpolate_profile(profile, time_grid)
+
+
 def build_time_grid(dt: float, t_end: float) -> np.ndarray:
     """Generate uniform time grid for solver integration.
     
